@@ -44,7 +44,6 @@
 .sidebar {
     width: 260px;
     min-width: 260px;
-    height: calc(100vh - 60px);
     background: #f7f7f7;
     padding: 20px;
 }
