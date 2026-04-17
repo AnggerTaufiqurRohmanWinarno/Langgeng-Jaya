@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('kategori_barang', function (Blueprint $table) {
-            $table->id();
+            $table->id()->primary();
             $table->string('nama_kategori');
             $table->timestamps();
         });
@@ -23,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::dropIfExists('kategori_barang');
     }
 };

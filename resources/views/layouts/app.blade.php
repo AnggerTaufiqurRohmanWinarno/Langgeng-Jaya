@@ -46,6 +46,7 @@
     min-width: 260px;
     background: #f7f7f7;
     padding: 20px;
+    height: 100vh;
 }
 
 .sidebar h4 {
@@ -91,9 +92,13 @@
 
 <div class="navbar">
     <div>LANGGENG JAYA</div>
-    <a href="/" class="btn-logout">
+    <a href="#" class="btn-logout" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
         <i class="fa-solid fa-right-from-bracket"></i> Logout
     </a>
+
+    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display:none;">
+        @csrf
+    </form>
 </div>
 
 <div class="container">
