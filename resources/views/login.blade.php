@@ -125,12 +125,13 @@ body {
     <div class="login-box">
         
         <div class="logo-text">Langgeng Jaya</div>
-
-        <form>
+        <form action="{{ route('loginFunction') }}" method="POST">
+            @csrf
 
             <div class="input-group">
-                <label>Password</label>
-                <input type="password" placeholder="">
+                <label>Masukkan PIN</label>
+                <input type="password" inputmode="numeric" pattern="[0-9]*" name="password" required>
+                
             </div>
 
             <div class="actions">
@@ -138,9 +139,16 @@ body {
                     <input type="checkbox"> Remember Me
                 </label>
                 
-                <button type="button" class="btn" onclick="window.location.href='/dashboard'">Log In</button>
+                <button type="submit" class="btn">Log In</button>
             </div>
         </form>
+        @if($errors->any())
+                <div class="alert alert-danger">
+                        @foreach($errors->all() as $error)
+                        <p>{{ $error }}</p>
+                    @endforeach
+                </div>
+        @endif
 
         <div class="links">
             <a href="#">Lost your password?</a>

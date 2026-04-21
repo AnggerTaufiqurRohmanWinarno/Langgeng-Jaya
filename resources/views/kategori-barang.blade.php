@@ -53,8 +53,40 @@ input:focus {
 
 </style>
 
+@endsection
+
+@section('content')
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+
+<div class="container">
+    <div class="main">
+        <h2>Kategori Barang</h2>
+
+        <div class="card">
+            <form id="formKategori"  action="{{ route('kategori-barang.store') }}" method="POST">
+                @csrf
+
+                <div class="form-group">
+                    <label>Nama Barang</label>
+                    <input type="text" name="nama_kategori" placeholder="Contoh: Besi Tua" required>
+                </div>
+
+                <button type="submit" class="btn-submit" >
+                    <i class="fa-solid fa-save"></i> Simpan
+                </button>
+            </form>
+        </div>
+        
+    </div>
+</div>
+
 <script>
-function confirmSubmit() {
+document.getElementById('formKategori').addEventListener('submit', function(e) {
+    e.preventDefault(); 
+
     Swal.fire({
         title: 'Simpan Kategori?',
         text: "Nama barang akan ditambahkan!",
@@ -67,38 +99,10 @@ function confirmSubmit() {
         reverseButtons: true
     }).then((result) => {
         if (result.isConfirmed) {
-            document.querySelector('form').submit();
+            e.target.submit();
         }
     });
-}
+});
 </script>
-
-@endsection
-
-@section('content')
-
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-<div class="container">
-    <div class="main">
-        <h2>Kategori Barang</h2>
-
-        <div class="card">
-            <form action="/kategori-barang" method="POST">
-                @csrf
-
-                <div class="form-group">
-                    <label>Nama Barang</label>
-                    <input type="text" name="nama_barang" placeholder="Contoh: Besi Tua" required>
-                </div>
-
-                <button type="button" class="btn-submit" onclick="confirmSubmit()">
-                    <i class="fa-solid fa-save"></i> Simpan
-                </button>
-            </form>
-        </div>
-
-    </div>
-</div>
 
 @endsection

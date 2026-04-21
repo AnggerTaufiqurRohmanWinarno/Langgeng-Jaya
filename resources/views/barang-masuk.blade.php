@@ -63,27 +63,7 @@ input:focus, select:focus {
 
 </style>
 
-<script>
-function confirmSubmit() {
-    Swal.fire({
-        title: 'Simpan Data?',
-        text: "Pastikan data sudah benar ya!",
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonColor: '#3E7B27',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Ya, Simpan!',
-        cancelButtonText: 'Batal',
-        reverseButtons: true
-    }).then((result) => {
-        if (result.isConfirmed) {
-            document.querySelector('form').submit();
-        }
-    });
-}
-</script>
-
-@endsection  {{-- ⬅️ INI YANG KAMU LUPA --}}
+@endsection 
 
 @section('content')
 
@@ -94,37 +74,62 @@ function confirmSubmit() {
         <h2>Input Barang Masuk</h2>
 
         <div class="card">
-            <form action="/barang-masuk" method="POST">
+            <form id="formBarangMasuk" action="{{ route('barang-masuk.store') }}" method="POST">
                 @csrf
 
                 <div class="form-group">
                     <label>Tanggal</label>
-                    <input type="date" name="tanggal" required>
+                    <input type="date" name="tanggal_masuk" required>
                 </div>
 
                 <div class="form-group">
                     <label>Nama Barang</label>
-                    <select name="nama_barang" required>
+                    <select name="id_kategoriBarang" required>
                         <option value="">-- Pilih Barang --</option>
-                        <option>Besi Tua</option>
-                        <option>Kardus</option>
-                        <option>Botol Kaca</option>
-                        <option>Plastik</option>
+                        @foreach ($query as $k)
+                            <option value="{{ $k->id }}">{{ $k->nama_kategori }}</option>
+                        @endforeach
                     </select>
                 </div>
 
                 <div class="form-group">
                     <label>Berat (Kg)</label>
-                    <input type="number" name="berat" placeholder="Masukkan berat" required>
+                    <input type="number" name="jumlah" placeholder="Masukkan berat" required>
                 </div>
 
-                <button type="button" class="btn-submit" onclick="confirmSubmit()">
+                <button type="submit" class="btn-submit">
                     <i class="fa-solid fa-save"></i> Simpan
                 </button>
             </form>
         </div>
-
+        @if (session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
     </div>
 </div>
+
+<script>
+document.getElementById('formBarangMasuk').addEventListener('submit', function(e) {
+    e.preventDefault(); 
+
+    Swal.fire({
+        title: 'Simpan Barang Masuk?',
+        text: "Pastikan data sudah benar ya!",
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3E7B27',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Ya, Simpan!',
+        cancelButtonText: 'Batal',
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            e.target.submit();
+        }
+    });
+});
+</script>
 
 @endsection

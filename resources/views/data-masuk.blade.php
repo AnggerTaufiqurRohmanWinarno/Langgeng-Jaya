@@ -67,30 +67,14 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>01-04-2026</td>
-                        <td>Besi Tua</td>
-                        <td>120 Kg</td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>02-04-2026</td>
-                        <td>Kardus</td>
-                        <td>80 Kg</td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>03-04-2026</td>
-                        <td>Botol Kaca</td>
-                        <td>45 Kg</td>
-                    </tr>
-                    <tr>
-                        <td>4</td>
-                        <td>04-04-2026</td>
-                        <td>Plastik</td>
-                        <td>60 Kg</td>
-                    </tr>
+                    @foreach ($barangMasuk as $item)
+                        <tr>
+                            <td>{{ $loop->iteration }}</td>
+                            <td>{{ $item->tanggal_masuk }}</td>
+                            <td>{{ $item->nama_kategori }}</td>
+                            <td>{{ $item->jumlah }} Kg</td>
+                        </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>
