@@ -12,7 +12,8 @@ class KategoriBarangController extends Controller
      */
     public function index()
     {
-        return view('kategori-barang');
+        $kategori = KategoriBarang::all();
+        return view('kategori-barang', compact('kategori'));
     }
 
     /**
@@ -30,4 +31,36 @@ class KategoriBarangController extends Controller
 
         return redirect()->route('kategori-barang.index')->with('success', 'Kategori barang berhasil ditambahkan.');
     }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
+    {
+        $kategori = KategoriBarang::findOrFail($id);
+        $kategori->delete();
+        return redirect()->route('kategori-barang.index')->with('success', 'Kategori barang berhasil dihapus.');
+    }
+
+    public function show(string $id)
+    {
+        $kategori = KategoriBarang::findOrFail($id);
+        return view('edit-kategori', compact('kategori'));
+
+    }
+
+    public function update(Request $request, string $id)
+    {
+        $request->validate([
+            'nama_kategori' => 'required'
+        ]);
+
+        $kategori = KategoriBarang::findOrFail($id);
+        $kategori->update([
+            'nama_kategori' => $request->nama_kategori
+        ]);
+
+        return redirect()->route('kategori-barang.index')->with('success', 'Kategori barang berhasil diperbarui.');
+    }
+
 }
