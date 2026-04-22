@@ -18,9 +18,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/barang-keluar-store', [App\Http\Controllers\BarangKeluar::class, 'store'])->name('barang-keluar.store');
 
 
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    });
+    Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
 
     Route::get('/data-masuk', function () {
         return view('data-masuk');
@@ -32,6 +30,10 @@ Route::middleware('auth')->group(function () {
     
     Route::get('/kategori-barang', [App\Http\Controllers\KategoriBarangController::class, 'index'])->name('kategori-barang.index');
     Route::post('/kategori-barang', [App\Http\Controllers\KategoriBarangController::class, 'store'])->name('kategori-barang.store');
+    Route::delete('/kategori-barang/{id}', [App\Http\Controllers\KategoriBarangController::class, 'destroy'])->name('kategori-barang.destroy');
+    Route::get('/kategori-barang/{id}', [App\Http\Controllers\KategoriBarangController::class, 'show'])->name('kategori-barang.show');
+    Route::put('/kategori-barang/{id}', [App\Http\Controllers\KategoriBarangController::class, 'update'])->name('kategori-barang.update');
+
 
     Route::post('/logout', [App\Http\Controllers\LoginController::class, 'logout'])->name('logout');
 });
