@@ -64,8 +64,6 @@
                         <th>Tanggal</th>
                         <th>Nama Barang</th>
                         <th>Berat (Kg)</th>
-                        <th>Bulan</th>
-                        <th>Minggu</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -75,8 +73,6 @@
                             <td>{{ $item->tanggal_keluar }}</td>
                             <td>{{ $item->nama_kategori }}</td>
                             <td>{{ $item->berat }} Kg</td>
-                            <td>{{ $item->bulan }}</td>
-                            <td>{{ $item->minggu }}</td>
                         </tr>
                     @endforeach
                 </tbody>

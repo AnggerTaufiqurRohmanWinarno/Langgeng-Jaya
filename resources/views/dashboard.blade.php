@@ -112,21 +112,24 @@
         <i class="fa-regular fa-bell"></i>
         <div>
             <div><b>Barang yang bisa dijual</b></div>
-            <div style="font-size:13px;color:#888;">{{ $rekomendasi }}</div>
+            @foreach ($rekomendasi as $barang => $status)
+                <div>
+                    <b>{{ ucfirst($barang) }}</b> : 
+                    <span style="color: {{ $status == 'JUAL' ? 'green' : 'red' }}">
+                        {{ $status }}
+                    </span>
+                </div>
+            @endforeach
         </div>
     </div>
 
     <div class="stats">
-        @foreach ($topKategori as $item)
-            @php
-                $kat = $kategori[$item->id_kategoriBarang];
-            @endphp
-
-            <div class="stat-box" data-barang="{{ $item->id_kategoriBarang }}">
+       @foreach ($topKategori as $item)
+            <div class="stat-box" data-barang="{{ $item->id }}">
                 <div class="stat-title">Total Barang</div>
                 <div class="stat-content">
                     <div>
-                        {{ $kat->nama_kategori }}
+                        {{ $item->nama_kategori }}
                         <small>{{ now()->format('d/m/Y') }}</small>
                     </div>
                     <h2>{{ $item->total }}</h2>

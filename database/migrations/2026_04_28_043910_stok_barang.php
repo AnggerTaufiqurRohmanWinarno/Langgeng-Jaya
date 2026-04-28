@@ -11,11 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('barang_keluar', function (Blueprint $table) {
-            $table->id()->unique()->primary();
+        Schema::create('stok_barang', function (Blueprint $table) {
+            $table->id();
             $table->foreignId('id_kategoriBarang')->constrained('kategori_barang')->onDelete('cascade');
-            $table->integer('berat');
-            $table->date('tanggal_keluar');
+            $table->integer('stok')->default(0);
             $table->timestamps();
         });
     }

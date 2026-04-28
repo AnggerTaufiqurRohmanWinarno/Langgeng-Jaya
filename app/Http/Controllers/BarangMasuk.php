@@ -35,8 +35,13 @@ class BarangMasuk extends Controller
             'created_at' => now(),
             'updated_at' => now(),
         ]);
+        DB::table('stok_barang')->updateOrInsert(
+            ['id_kategoriBarang' => $request->id_kategoriBarang],
+            ['stok' => DB::raw("stok + {$request->jumlah}")]
+        );
 
         return redirect()->route('barang-masuk.index')->with('success', 'Barang masuk berhasil ditambahkan.');
+        
     }
 
     /**

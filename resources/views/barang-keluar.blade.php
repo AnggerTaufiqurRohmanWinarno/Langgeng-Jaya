@@ -96,14 +96,6 @@ input:focus, select:focus {
                     <label>Berat (Kg)</label>
                     <input type="number" name="berat" placeholder="Masukkan berat" required>
                 </div>
-                <div class="form-group">
-                    <label>Bulan</label>
-                    <input type="number" name="bulan" placeholder="Masukkan bulan" required>
-                </div>
-                <div class="form-group">
-                    <label>Minggu</label>
-                    <input type="number" name="minggu" placeholder="Masukkan minggu" required>
-                </div>
 
                 <button type="submit" class="btn-submit" onclick="confirmSubmit()">
                     <i class="fa-solid fa-save"></i> Simpan
@@ -114,7 +106,12 @@ input:focus, select:focus {
             <div class="alert alert-success">
                 {{ session('success') }}
             </div>
-        @endif
+            @elseif (session('error'))
+            <div class="alert alert-danger">
+                {{ session('error') }}
+            </div>
+            @endif
+
     </div>
 </div>
 
