@@ -172,6 +172,50 @@ input:focus {
     </div>
 </div>
 
+<script>
+document.getElementById('formKategori').addEventListener('submit', function(e) {
+    e.preventDefault(); 
 
+    Swal.fire({
+        title: 'Simpan Kategori Barang?',
+        text: "Pastikan data sudah benar ya!",
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3E7B27',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Ya, Simpan!',
+        cancelButtonText: 'Batal',
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            e.target.submit();
+        }
+    });
+});
+
+
+document.querySelectorAll('.btn-delete').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+        e.preventDefault();
+
+        const form = this.closest('form');
+
+        Swal.fire({
+            title: 'Yakin mau hapus?',
+            text: "Data tidak bisa dikembalikan!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#aaa',
+            confirmButtonText: 'Ya, Hapus!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                form.submit();
+            }
+        });
+    });
+});
+</script>
 
 @endsection

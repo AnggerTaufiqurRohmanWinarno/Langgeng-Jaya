@@ -5,34 +5,32 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Http;
 
 class DashboardController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        $topKategori = DB::table('barang_masuk')
-            ->select('id_kategoriBarang', DB::raw('SUM(jumlah) as total'))
-            ->groupBy('id_kategoriBarang')
-            ->orderByDesc('total')
+        $topKategori = DB::table('stok_barang as s')
+            ->join('kategori_barang as k', 's.id_kategoriBarang', '=', 'k.id')
+            ->select(
+                'k.id',
+                'k.nama_kategori',
+                's.stok as total'
+            )
+            ->orderByDesc('s.stok')
             ->take(4)
             ->get();
 
-        // Join ke tabel kategori
-        $kategori = DB::table('kategori_barang')
-            ->whereIn('id', $topKategori->pluck('id_kategoriBarang'))
-            ->get()
-            ->keyBy('id');
-
-        // Format data untuk chart
         $dataBarang = [];
+        $rekomendasi = [];
 
         foreach ($topKategori as $item) {
-            $id = $item->id_kategoriBarang;
 
-            // ambil data per hari (contoh 7 hari)
+            $id = $item->id;
+            $nama = strtolower($item->nama_kategori);
+            $stok = $item->total;
+
             $masuk = DB::table('barang_masuk')
                 ->where('id_kategoriBarang', $id)
                 ->orderBy('tanggal_masuk')
@@ -46,20 +44,38 @@ class DashboardController extends Controller
                 ->pluck('berat');
 
             $dataBarang[$id] = [
-                'nama' => $kategori[$id]->nama_kategori,
+                'nama' => $nama,
                 'masuk' => $masuk->values()->toArray(),
-                'keluar' => $keluar->values()->toArray()
+                'keluar' => $keluar->values()->toArray(),
+                'stok' => $stok // 🔥 stok real
             ];
+
+            try {
+                $response = Http::post('https://machinelearning-production-3e2d.up.railway.app/prediksi', [
+                    'barang' => $nama,
+                    'stok' => $stok
+                ]);
+
+                if ($response->successful()) {
+                    $rekomendasi[$nama] = $response->json()['rekomendasi'] ?? 'ERROR';
+                } else {
+                    $rekomendasi[$nama] = 'API ERROR';
+                }
+
+            } catch (\Exception $e) {
+                $rekomendasi[$nama] = 'SERVER OFF';
+            }
         }
-        
-        $json = file_get_contents(storage_path('app/hasil_ml.json'));
-        $dataML = json_decode($json, true);
-        $rekomendasi = $dataML['rekomendasi'];
 
         $start = Carbon::now()->subDays(6)->format('d/m/Y');
         $end   = Carbon::now()->format('d/m/Y');
 
-        return view('dashboard', compact('topKategori', 'kategori', 'dataBarang','rekomendasi', 'start', 'end'));
+        return view('dashboard', compact(
+            'topKategori',
+            'dataBarang',
+            'start',
+            'end',
+            'rekomendasi'
+        ));
     }
-
 }

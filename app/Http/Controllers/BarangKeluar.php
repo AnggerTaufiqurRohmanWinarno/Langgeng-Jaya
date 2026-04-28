@@ -25,19 +25,28 @@ class BarangKeluar extends Controller
             'id_kategoriBarang' => 'required',
             'berat' => 'required|integer',
             'tanggal_keluar' => 'required|date',
-            'bulan' => 'required|integer',
-            'minggu' => 'required|integer',
         ]);
+
+        $stok = DB::table('stok_barang')
+            ->where('id_kategoriBarang', $request->id_kategoriBarang)
+            ->value('stok') ?? 0;
+
+        if ($stok < $request->berat) {
+            return back()->with('error', 'Stok tidak cukup!')->withInput();
+        }
 
         DB::table('barang_keluar')->insert([
             'id_kategoriBarang' => $request->id_kategoriBarang,
             'berat' => $request->berat,
             'tanggal_keluar' => $request->tanggal_keluar,
-            'bulan' => $request->bulan,
-            'minggu' => $request->minggu,
             'created_at' => now(),
             'updated_at' => now(),
         ]);
+
+        // 🔻 KURANGI STOK
+        DB::table('stok_barang')
+            ->where('id_kategoriBarang', $request->id_kategoriBarang)
+            ->decrement('stok', $request->berat);
 
         return redirect()->route('barang-keluar.index')->with('success', 'Barang keluar berhasil ditambahkan.');
     }
