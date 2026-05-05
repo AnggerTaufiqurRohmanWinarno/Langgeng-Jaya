@@ -71,7 +71,7 @@ input:focus, select:focus {
 
 <div class="container">
     <div class="main">
-        <h2>Input Barang Masuk</h2>
+        <h2>Edit Kategori Barang</h2>
 
         <div class="card">
             <form id="formEditKategori" action="{{ route('kategori-barang.update', $kategori->id) }}" method="POST">
@@ -81,6 +81,11 @@ input:focus, select:focus {
                 <div class="form-group">
                     <label>Nama Kategori</label>
                     <input type="text" name="nama_kategori" value="{{ $kategori->nama_kategori }}" placeholder="Masukkan nama kategori" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Deskripsi Kategori</label>
+                    <input type="text" name="deskripsi" value="{{ $kategori->deskripsi }}" placeholder="Masukkan deskripsi kategori" required>
                 </div>
 
                 <button type="submit" class="btn-submit">

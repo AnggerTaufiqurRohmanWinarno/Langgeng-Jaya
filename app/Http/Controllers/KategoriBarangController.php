@@ -22,11 +22,13 @@ class KategoriBarangController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nama_kategori' => 'required'
+            'nama_kategori' => 'required',
+            'deskripsi' => 'nullable'
         ]);
 
         KategoriBarang::create([
-            'nama_kategori' => $request->nama_kategori
+            'nama_kategori' => $request->nama_kategori,
+            'deskripsi' => $request->deskripsi
         ]);
 
         return redirect()->route('kategori-barang.index')->with('success', 'Kategori barang berhasil ditambahkan.');
@@ -52,12 +54,14 @@ class KategoriBarangController extends Controller
     public function update(Request $request, string $id)
     {
         $request->validate([
-            'nama_kategori' => 'required'
+            'nama_kategori' => 'required',
+            'deskripsi' => 'nullable'
         ]);
 
         $kategori = KategoriBarang::findOrFail($id);
         $kategori->update([
-            'nama_kategori' => $request->nama_kategori
+            'nama_kategori' => $request->nama_kategori,
+            'deskripsi' => $request->deskripsi
         ]);
 
         return redirect()->route('kategori-barang.index')->with('success', 'Kategori barang berhasil diperbarui.');

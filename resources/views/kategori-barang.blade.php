@@ -125,8 +125,13 @@ input:focus {
                 @csrf
 
                 <div class="form-group">
-                    <label>Nama Barang</label>
+                    <label>Nama Kategori</label>
                     <input type="text" name="nama_kategori" placeholder="Contoh: Besi Tua" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Deskripsi Kategori</label>
+                    <input type="text" name="deskripsi" placeholder="Contoh: Barang bekas yang masih bisa digunakan" required>
                 </div>
 
                 <button type="submit" class="btn-submit" >
@@ -141,6 +146,7 @@ input:focus {
                     <tr>
                         <th>No</th>
                         <th>Nama Kategori</th>
+                        <th>Deskripsi Kategori</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -149,6 +155,7 @@ input:focus {
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $item->nama_kategori }}</td>
+                            <td>{{ $item->deskripsi }}</td>
                             <td>
                                <div class="action-buttons">
                                     <a href="{{ route('kategori-barang.show', $item->id) }}" class="btn-submit" style="background: #3E7B27;">

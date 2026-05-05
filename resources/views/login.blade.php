@@ -134,11 +134,7 @@ body {
                 
             </div>
 
-            <div class="actions">
-                <label>
-                    <input type="checkbox"> Remember Me
-                </label>
-                
+            <div class="actions">               
                 <button type="submit" class="btn">Log In</button>
             </div>
         </form>
@@ -150,9 +146,6 @@ body {
                 </div>
         @endif
 
-        <div class="links">
-            <a href="#">Lost your password?</a>
-        </div>
 
     </div>
 </div>

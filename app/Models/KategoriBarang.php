@@ -10,5 +10,5 @@ class KategoriBarang extends Model
     use HasFactory;
 
     protected $table = 'kategori_barang';
-    protected $fillable = ['nama_kategori'];
+    protected $fillable = ['nama_kategori', 'deskripsi'];
 }

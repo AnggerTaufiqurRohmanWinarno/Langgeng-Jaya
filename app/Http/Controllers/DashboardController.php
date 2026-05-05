@@ -47,7 +47,7 @@ class DashboardController extends Controller
                 'nama' => $nama,
                 'masuk' => $masuk->values()->toArray(),
                 'keluar' => $keluar->values()->toArray(),
-                'stok' => $stok // 🔥 stok real
+                'stok' => $stok 
             ];
 
             try {
