@@ -3,14 +3,16 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
+use Illuminate\View\View;
 
 class BarangKeluar extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): View
     {
         $query = DB::table('kategori_barang')->get();
         return view('barang-keluar', ['query' => $query]);
@@ -19,7 +21,7 @@ class BarangKeluar extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $request->validate([
             'id_kategoriBarang' => 'required',
@@ -43,10 +45,12 @@ class BarangKeluar extends Controller
             'updated_at' => now(),
         ]);
 
-        // 🔻 KURANGI STOK
+        $berat = $request->integer('berat');
+
+        // 🔻 KURANGI STOK — cast ke int agar type-safe
         DB::table('stok_barang')
             ->where('id_kategoriBarang', $request->id_kategoriBarang)
-            ->decrement('stok', $request->berat);
+            ->decrement('stok', $berat);    
 
         return redirect()->route('barang-keluar.index')->with('success', 'Barang keluar berhasil ditambahkan.');
     }
@@ -54,7 +58,7 @@ class BarangKeluar extends Controller
     /**
      * Display the specified resource.
      */
-    public function show()
+    public function show(): View
     {
         $barangKeluar = DB::table('barang_keluar')
             ->join('kategori_barang', 'barang_keluar.id_kategoriBarang', '=', 'kategori_barang.id')

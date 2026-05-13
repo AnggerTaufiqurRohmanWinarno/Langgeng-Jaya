@@ -3,24 +3,19 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
+use Illuminate\View\View;
 
 class BarangMasuk extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(): View
     {
         $query = DB::table('kategori_barang')->get();
         return view('barang-masuk', ['query' => $query]);
     }
 
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $request->validate([
             'id_kategoriBarang' => 'required|exists:kategori_barang,id',
@@ -28,26 +23,36 @@ class BarangMasuk extends Controller
             'tanggal_masuk' => 'required|date',
         ]);
 
+        $jumlah = $request->integer('jumlah');
+
         DB::table('barang_masuk')->insert([
             'id_kategoriBarang' => $request->id_kategoriBarang,
-            'jumlah' => $request->jumlah,
+            'jumlah' => $jumlah,
             'tanggal_masuk' => $request->tanggal_masuk,
             'created_at' => now(),
             'updated_at' => now(),
         ]);
-        DB::table('stok_barang')->updateOrInsert(
-            ['id_kategoriBarang' => $request->id_kategoriBarang],
-            ['stok' => DB::raw("stok + {$request->jumlah}")]
-        );
+
+        // Gunakan increment() agar tidak perlu DB::raw sama sekali
+        $existing = DB::table('stok_barang')
+            ->where('id_kategoriBarang', $request->id_kategoriBarang)
+            ->exists();
+
+        if ($existing) {
+            DB::table('stok_barang')
+                ->where('id_kategoriBarang', $request->id_kategoriBarang)
+                ->increment('stok', $jumlah);
+        } else {
+            DB::table('stok_barang')->insert([
+                'id_kategoriBarang' => $request->id_kategoriBarang,
+                'stok' => $jumlah,
+            ]);
+        }
 
         return redirect()->route('barang-masuk.index')->with('success', 'Barang masuk berhasil ditambahkan.');
-        
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show()
+    public function show(): View
     {
         $barangMasuk = DB::table('barang_masuk')
             ->join('kategori_barang', 'barang_masuk.id_kategoriBarang', '=', 'kategori_barang.id')

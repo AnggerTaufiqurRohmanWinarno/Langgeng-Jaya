@@ -3,13 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
 {
-    function login(Request $request)
+    public function login(Request $request): RedirectResponse
     {
         $request->validate([
             'password' => 'required'
@@ -17,7 +18,7 @@ class LoginController extends Controller
 
         $user = User::first();
 
-        if ($user && Hash::check($request->password, $user->password)) {
+        if ($user && Hash::check($request->string('password')->value(), $user->password)) {
             Auth::login($user);
             $request->session()->regenerate();
 
@@ -29,7 +30,7 @@ class LoginController extends Controller
         ]);
     }
 
-    public function logout(Request $request)
+    public function logout(Request $request): RedirectResponse
     {
         Auth::logout();
 
