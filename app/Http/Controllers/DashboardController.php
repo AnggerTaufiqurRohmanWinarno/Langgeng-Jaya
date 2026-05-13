@@ -4,12 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\View\View;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(): View
     {
         $topKategori = DB::table('stok_barang as s')
             ->join('kategori_barang as k', 's.id_kategoriBarang', '=', 'k.id')
@@ -47,7 +48,7 @@ class DashboardController extends Controller
                 'nama' => $nama,
                 'masuk' => $masuk->values()->toArray(),
                 'keluar' => $keluar->values()->toArray(),
-                'stok' => $stok 
+                'stok' => $stok
             ];
 
             try {
@@ -57,7 +58,11 @@ class DashboardController extends Controller
                 ]);
 
                 if ($response->successful()) {
-                    $rekomendasi[$nama] = $response->json()['rekomendasi'] ?? 'ERROR';
+                    $json = $response->json();
+                    // Fix: pastikan $json adalah array sebelum akses offset
+                    $rekomendasi[$nama] = is_array($json) && isset($json['rekomendasi']) && is_scalar($json['rekomendasi'])
+                        ? (string) $json['rekomendasi']
+                        : 'ERROR';
                 } else {
                     $rekomendasi[$nama] = 'API ERROR';
                 }
